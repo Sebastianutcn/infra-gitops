@@ -1,44 +1,48 @@
-name: Terraform
+name: Terraform GitOps (GCP VM)
 
 on:
-    push:
-        branches:
-            - main
-    pull_request:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
-    terraform:
-        name: Terraform
-        runs-on: ubuntu-latest
+  terraform:
+    name: Terraform Plan and Apply (GCP)
+    runs-on: ubuntu-latest
 
-        steps:
-            # Checkout the repository
-            - name: Checkout code
-              uses: actions/checkout@v3
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-            # Set up Terraform
-            - name: Setup Terraform
-              uses: hashicorp/setup-terraform@v2
-              with:
-                    terraform_version: 1.5.0 # Adjust to your required version
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.6.6
 
-            # Initialize Terraform
-            - name: Terraform Init
-              run: terraform init
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          version: 'latest'
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
 
-            # Format Terraform code
-            - name: Terraform Format
-              run: terraform fmt
+      - name: Configure gcloud CLI
+        run: |
+          gcloud auth activate-service-account --key-file=<(echo "${{ secrets.GCP_SA_KEY }}")
+          gcloud config set project ${{ secrets.GCP_PROJECT_ID }}
+        env:
+          CLOUDSDK_CORE_DISABLE_PROMPTS: '1'
 
-            # Validate Terraform configuration
-            - name: Terraform Validate
-              run: terraform validate
+      - name: Terraform Init
+        run: terraform init
 
-            # Plan Terraform changes
-            - name: Terraform Plan
-              run: terraform plan
+      - name: Terraform Format
+        run: terraform fmt
 
-            # Apply Terraform changes (only on push to main)
-            - name: Terraform Apply
-              if: github.ref == 'refs/heads/main'
-              run: terraform apply -auto-approve
+      - name: Terraform Validate
+        run: terraform validate
+
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main'
+        run: terraform apply -auto-approve 
