@@ -1,0 +1,4 @@
+.terraform/
+credentials.json
+.terraform.lock.hcl
+*terraform.tfstate*
