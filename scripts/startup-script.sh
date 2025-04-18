@@ -18,6 +18,6 @@ curl -LO "https://dl.k8s.io/release/$(curl -s https://dl.k8s.io/release/stable.t
 install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 
 # Start Minikube
-minikube start --driver=docker --memory=4096 --cpus=2
+minikube start --driver=docker
 
 
