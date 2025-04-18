@@ -10,8 +10,11 @@ command_exists() {
 
 # Function to print status
 log() {
-    echo "[INFO] $1"
+    echo "[INFO] $1" >> /var/log/startup-script.log
 }
+
+touch /var/log/startup-script.log
+chmod 655 /var/log/startup-script.log
 
 # Check for sudo privileges
 if [ "$(id -u)" != "0" ]; then
