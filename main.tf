@@ -21,6 +21,7 @@ resource "google_compute_instance" "gitops_vm" {
 
     access_config {}
   }
-  #   metadata_startup_script = file("startup-script.sh")
+  
+  metadata_startup_script = file("startup-script.sh")
 
 }
