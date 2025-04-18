@@ -8,6 +8,8 @@ apt-get install -y docker.io curl conntrack
 # Enable Docker
 systemctl start docker
 systemctl enable docker
+usermod -aG docker $USER
+newgrp docker
 
 # Install Minikube
 curl -LO https://github.com/kubernetes/minikube/releases/latest/download/minikube-linux-amd64
