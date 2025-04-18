@@ -64,14 +64,14 @@ on:
   push:
     branches:
       - main
-      - destroy # Trigger destroy on push to 'destroy' branch
+
   workflow_dispatch: # Allow manual trigger
 jobs:
   terraform-apply:
     if: github.ref != 'refs/heads/destroy' # Skip apply on destroy branch
     runs-on: ubuntu-latest
     env:
-      TF_VAR_google_credentials: ${{ secrets.GOOGLE_CREDENTIALS_JSON }}
+      TF_VAR_google_credentials: ${{ secrets.GCP_SA_KEY }}
       TF_VAR_project_id: ${{ secrets.GCP_PROJECT_ID }}
     steps:
       - uses: actions/checkout@v4
@@ -82,10 +82,10 @@ jobs:
       - run: terraform apply -auto-approve
 
   terraform-destroy:
-    if: github.ref == 'refs/heads/destroy' || github.event_name == 'workflow_dispatch' # Run on destroy branch or manual trigger
+    if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch' # Run on destroy branch or manual trigger
     runs-on: ubuntu-latest
     env:
-      TF_VAR_google_credentials: ${{ secrets.GOOGLE_CREDENTIALS_JSON }}
+      TF_VAR_google_credentials: ${{ secrets.GCP_SA_KEY }}
       TF_VAR_project_id: ${{ secrets.GCP_PROJECT_ID }}
     steps:
       - uses: actions/checkout@v4
