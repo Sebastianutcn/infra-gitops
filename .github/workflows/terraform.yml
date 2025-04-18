@@ -52,12 +52,6 @@ jobs:
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: terraform apply -auto-approve tfplan
 
-      # Clean up
-      - name: Clean up
-        if: always()
-        run: rm -f tfplan
-        working-directory: ./terraform
-
 
 # name: Terraform Apply and Destroy
 # on:
