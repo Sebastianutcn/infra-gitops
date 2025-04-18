@@ -24,7 +24,7 @@ install minikube-linux-amd64 /usr/local/bin/minikube && rm minikube-linux-amd64
 minikube start --driver=docker
 
 # Wait for Minikube to be ready
-sleep 100
+sleep 200
 
 # Log completion
 echo "Minikube + Argo CD installed and running" >> /var/log/startup-script.log
