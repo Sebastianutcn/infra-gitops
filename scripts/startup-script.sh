@@ -1,37 +1,28 @@
 #!/bin/bash
 
-# Update and install necessary packages
-sudo apt-get update -y
-sudo apt-get upgrade -y
-sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common
+# Update and install dependencies
+apt-get update
+apt-get install -y curl apt-transport-https ca-certificates gnupg lsb-release \
+    conntrack socat ebtables ethtool docker.io curl unzip
 
-echo "Installing Docker and Minikube..." >> /tmp/startup-script.log
+# Enable Docker
+systemctl enable docker
+systemctl start docker
 
-# Install Docker
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-sudo apt-get update -y
-sudo apt-get install -y docker-ce docker-ce-cli containerd.io
-
-echo "Docker installation completed successfully." >> /tmp/startup-script.log
-
-# Add current user to the docker group
-sudo usermod -aG docker $USER
-
-echo "User $USER added to docker group. Please log out and log back in for the changes to take effect." >> /tmp/startup-script.log
+# Install kubectl
+curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
+chmod +x kubectl
+mv kubectl /usr/local/bin/
 
 # Install Minikube
-curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
-sudo install minikube-linux-amd64 /usr/local/bin/minikube
-rm minikube-linux-amd64
+curl -LO https://github.com/kubernetes/minikube/releases/latest/download/minikube-linux-amd64
+install minikube-linux-amd64 /usr/local/bin/minikube && rm minikube-linux-amd64
 
-echo "Minikube installation completed successfully." >> /tmp/startup-script.log
-
-# Start Minikube
+# Start Minikube with Docker driver
 minikube start --driver=docker --force
 
-# Enable Minikube addons (optional)
-# minikube addons enable dashboard
-# minikube addons enable ingress
+# Wait for Minikube to be ready
+sleep 100
 
-echo "Docker and Minikube installation completed successfully."
+# Log completion
+echo "Minikube + Argo CD installed and running" >> /var/log/startup-script.log
