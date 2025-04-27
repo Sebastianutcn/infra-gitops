@@ -1,13 +1,14 @@
-# .github/workflows/drift-detection.yml
-name: Drift Detection
-
+name: Terraform Unit Tests
 on:
-  schedule:
-    - cron: '*/5 * * * *' # Runs every hour (adjust as needed)
-  workflow_dispatch: # Allow manual trigger from GitHub UI
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  detect-drift:
+  unit-tests:
     runs-on: ubuntu-latest
     env:
       GOOGLE_CREDENTIALS: ${{ secrets.GCP_SA_KEY }}
@@ -39,6 +40,15 @@ jobs:
     - name: Terraform Validate
       uses: terraform validate
 
-    # Generate Terraform plan for drift detection
-    - name: Terraform Plan
-      uses: terraform plan -no-color -detailed-exitcode -out=tfplan
+    # Install TFlint
+    - name: Install TFlint
+      run: |
+        curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
+
+    # Run TFlint
+    - name: Run TFlint
+      run: |
+        # tflint --init
+        tflint
+
+

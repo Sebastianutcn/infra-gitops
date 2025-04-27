@@ -52,39 +52,3 @@ jobs:
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: terraform apply -auto-approve tfplan
 
-
-# name: Terraform Apply and Destroy
-# on:
-#   push:
-#     branches:
-#       - main
-
-#   workflow_dispatch: # Allow manual trigger
-# jobs:
-#   terraform-apply:
-#     if: github.ref != 'refs/heads/destroy' # Skip apply on destroy branch
-#     runs-on: ubuntu-latest
-#     env:
-#       TF_VAR_google_credentials: ${{ secrets.GCP_SA_KEY }}
-#       TF_VAR_project_id: ${{ secrets.GCP_PROJECT_ID }}
-#     steps:
-#       - uses: actions/checkout@v4
-#       - uses: hashicorp/setup-terraform@v3
-#         with:
-#           terraform_version: 1.x
-#       - run: terraform init
-#       - run: terraform apply -auto-approve
-
-#   terraform-destroy:
-#     if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch' # Run on destroy branch or manual trigger
-#     runs-on: ubuntu-latest
-#     env:
-#       TF_VAR_google_credentials: ${{ secrets.GCP_SA_KEY }}
-#       TF_VAR_project_id: ${{ secrets.GCP_PROJECT_ID }}
-#     steps:
-#       - uses: actions/checkout@v4
-#       - uses: hashicorp/setup-terraform@v3
-#         with:
-#           terraform_version: 1.x
-#       - run: terraform init
-#       - run: terraform destroy -auto-approve
