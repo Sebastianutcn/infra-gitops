@@ -41,4 +41,4 @@ jobs:
 
     # Generate Terraform plan for drift detection
     - name: Terraform Plan
-      uses: terraform plan -no-color -detailed-exitcode -out=tfplan
+      run: terraform plan -no-color -detailed-exitcode -out=tfplan
