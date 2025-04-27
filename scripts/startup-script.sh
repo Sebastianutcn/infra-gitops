@@ -26,5 +26,19 @@ minikube start --driver=docker
 # Wait for Minikube to be ready
 sleep 200
 
+# create argocd namespace
+kubectl create namespace argocd
+
+#install argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml &
+sleep 60
+
+# port-forward Argo CD server
+kubectl port-forward svc/argocd-server -n argocd 8080:443 &
+sleep 10
+
+# Get the initial admin password
+kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath="{.data.password}" | base64 -d > /tmp/argocd_password.txt
+
 # Log completion
 echo "Minikube + Argo CD installed and running" >> /var/log/startup-script.log
