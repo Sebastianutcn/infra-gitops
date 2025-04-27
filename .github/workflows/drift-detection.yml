@@ -3,7 +3,7 @@ name: Drift Detection
 
 on:
   schedule:
-    - cron: '*/5 * * * *' # Runs every hour (adjust as needed)
+    - cron: '*/5 * * * *' # Runs every 5 mins (adjust as needed)
   workflow_dispatch: # Allow manual trigger from GitHub UI
 
 jobs:
@@ -29,15 +29,15 @@ jobs:
 
     # Initialize Terraform
     - name: Terraform Init
-      uses: terraform init
+      run: terraform init
 
     # Format Terraform files
     - name: Terraform Format
-      uses: terraform fmt
+      run: terraform fmt
 
     # Validate Terraform configuration
     - name: Terraform Validate
-      uses: terraform validate
+      run: terraform validate
 
     # Generate Terraform plan for drift detection
     - name: Terraform Plan

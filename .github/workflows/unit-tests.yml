@@ -30,15 +30,15 @@ jobs:
 
     # Initialize Terraform
     - name: Terraform Init
-      uses: terraform init
+      run: terraform init
 
     # Format Terraform files
     - name: Terraform Format
-      uses: terraform fmt
+      run: terraform fmt
 
     # Validate Terraform configuration
     - name: Terraform Validate
-      uses: terraform validate
+      run: terraform validate
 
     # Install TFlint
     - name: Install TFlint
