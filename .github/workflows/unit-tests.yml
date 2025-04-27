@@ -51,4 +51,6 @@ jobs:
         # tflint --init
         tflint
 
+    # Unit testing with Terratest or terraform-compliance, and security checks with checkov
+
 
