@@ -22,10 +22,10 @@ resource "google_compute_instance" "gitops_vm" {
     access_config {}
   }
 
-  advanced_machine_features {
-    enable_nested_virtualization = true
-  }
+  # advanced_machine_features {
+  #   enable_nested_virtualization = true
+  # }
   
-  metadata_startup_script = file("scripts/startup-script.sh")
+  # metadata_startup_script = file("scripts/startup-script.sh")
 
 }

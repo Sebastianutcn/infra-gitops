@@ -33,26 +33,26 @@ jobs:
     - name: Terraform Plan
       id: plan
       run: |
-        export exitcode=0
-        terraform plan -detailed-exitcode -no-color -out tfplan || export exitcode=$?
-        
-        # echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
-        
+        terraform plan -detailed-exitcode -no-color -out tfplan
+        exitcode=$?
+
+        # Handle different exit codes
         if [ $exitcode -eq 2 ]; then
-            echo There was a drift!
-            exit 1
-        else 
-            exit 0
+          echo "Drift detected! Triggering actions..."
+          echo "drift=true" >> $GITHUB_ENV  # Set a variable to indicate drift
+          exit 0  # Successful run even if drift is detected
+        elif [ $exitcode -eq 0 ]; then
+          echo "No drift detected."
+          exit 0
+        else
+          echo "Terraform plan failed."
+          exit 1
         fi
 
-    # - name: Check for Drift
-    #    # Check if the previous step failed
-    #   run: echo "Drift detected!"
-
-    # - name: Create GitHub Issue if Drift Detected
-    #    # Check if the previous step failed
-    #   uses: peter-evans/create-issue-from-file@v4
-    #   with:
-    #     title: "Infrastructure Drift Detected"
-    #     content-filepath: .github/drift-issue-template.md
-    #     labels: drift, infrastructure
+    - name: Check for Drift and Create Issue
+      if: env.drift == 'true'  # Only run this step if drift is detected
+      uses: peter-evans/create-issue-from-file@v4
+      with:
+          title: "Infrastructure Drift Detected"
+          content-filepath: .github/drift-issue-template.md
+          labels: drift, infrastructure
