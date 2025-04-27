@@ -40,5 +40,9 @@ sleep 10
 # Get the initial admin password
 kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath="{.data.password}" | base64 -d > /tmp/argocd_password.txt
 
+# Apply application manifests
+kubectl apply -f application.yml &
+sleep 10
+
 # Log completion
 echo "Minikube + Argo CD installed and running" >> /var/log/startup-script.log
