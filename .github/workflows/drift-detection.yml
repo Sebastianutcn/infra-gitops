@@ -33,14 +33,14 @@ jobs:
     - name: Terraform Plan
       id: plan
       run: |
-        terraform plan -detailed-exitcode || exit 0
+        terraform plan -detailed-exitcode
 
     - name: Check for Drift
-      if: failure()
+      if: ${{ failure() }} # Check if the previous step failed
       run: echo "Drift detected!"
 
     - name: Create GitHub Issue if Drift Detected
-      if: failure()
+      if: ${{ failure() }} # Check if the previous step failed
       uses: peter-evans/create-issue-from-file@v4
       with:
         title: "Infrastructure Drift Detected"

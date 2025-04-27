@@ -1,5 +1,5 @@
 provider "google" {
-#   credentials = var.credentials
+  # credentials = file("credentials.json")
   project     = "gitops-457111"
   region      = "europe-west1"
   zone        = "europe-west1-b"
