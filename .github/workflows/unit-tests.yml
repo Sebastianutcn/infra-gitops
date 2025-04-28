@@ -48,9 +48,9 @@ jobs:
     # Run TFlint
     - name: Run TFlint
       run: |
-        # tflint --init
         tflint
 
     # Unit testing with Terratest or terraform-compliance, and security checks with checkov
-
+    # unit testing before terraform.yml
+    # warnings
 

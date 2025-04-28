@@ -42,7 +42,8 @@ jobs:
     # Generate Terraform plan for drift detection
     - name: Terraform Plan
       run: |
-         terraform plan -no-color -detailed-exitcode -out=tfplan || export exit_code=$?
+         terraform plan -no-color -detailed-exitcode -out=tfplan 
+         export exit_code=$?
          if [ "$exit_code" -eq 2 ]; then
            echo "Drift detected!"
            exit 1
