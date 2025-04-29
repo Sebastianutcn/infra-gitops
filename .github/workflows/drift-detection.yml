@@ -41,15 +41,23 @@ jobs:
 
     # Generate Terraform plan for drift detection
     - name: Terraform Plan
+      id: plan
       run: |
-         terraform plan -no-color -detailed-exitcode -out=tfplan 
-         export exit_code=$? >> $GITHUB_ENV
+         terraform plan -no-color -detailed-exitcode
+         export exit_code=$? 
+         echo "::set-output name=exit_code::$?"
 
     # Check for drift
     - name: Check for Drift
       run: |
-        if [ ${{ env.exit_code }} -eq 2 ]; then
+        if [ ${{ steps.plan.outputs.exit_code }} -eq 2 ]; then
           echo "Drift detected!"
         else
           echo "No drift detected."
         fi
+
+    # Apply Terraform changes if drift is detected
+    - name: Apply if drift detected
+      if: steps.plan.outputs.exit_code == 2
+      run: terraform apply -auto-approve
+
