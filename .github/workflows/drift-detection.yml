@@ -45,6 +45,7 @@ jobs:
       run: |
          terraform plan -no-color -detailed-exitcode
          export exit_code=$?
+         echo $exit_code
 
          if [ $exit_code -eq 0 ]; then
            echo "No drift detected."
