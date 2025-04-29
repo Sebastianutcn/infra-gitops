@@ -29,7 +29,7 @@ jobs:
 
     # Initialize Terraform
     - name: Terraform Init
-      run: terraform init
+      run: terraform init -input=false
 
     # Format Terraform files
     - name: Terraform Format
