@@ -21,11 +21,11 @@ resource "google_compute_instance" "gitops_vm" {
 
     access_config {}
   }
+}
 
-  # advanced_machine_features {
-  #   enable_nested_virtualization = true
-  # }
-  
-  # metadata_startup_script = file("scripts/startup-script.sh")
-
+# create a bucket in gcp
+resource "google_storage_bucket" "gitops_bucket" {
+  name     = "gitops-bucket-457111"
+  location = "EU"
+  force_destroy = true
 }
