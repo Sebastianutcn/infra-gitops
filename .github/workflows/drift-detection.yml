@@ -44,8 +44,7 @@ jobs:
       id: plan
       run: |
          terraform plan -no-color -detailed-exitcode
-         export exit_code=$? 
-         echo "::set-output name=exit_code::$?"
+         echo "exit_code=$?" >> $GITHUB_OUTPUT 
 
     # Check for drift
     - name: Check for Drift
