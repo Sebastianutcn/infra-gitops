@@ -6,22 +6,22 @@ provider "google" {
 
 }
 
-resource "google_compute_instance" "gitops_vm" {
-  name         = "vm-instance"
-  machine_type = "e2-medium"
-  zone         = "europe-west1-b"
-  boot_disk {
-    initialize_params {
-      image = "debian-cloud/debian-11"
-    }
-  }
+# resource "google_compute_instance" "gitops_vm" {
+#   name         = "vm-instance"
+#   machine_type = "e2-medium"
+#   zone         = "europe-west1-b"
+#   boot_disk {
+#     initialize_params {
+#       image = "debian-cloud/debian-11"
+#     }
+#   }
 
-  network_interface {
-    network = "default"
+#   network_interface {
+#     network = "default"
 
-    access_config {}
-  }
-}
+#     access_config {}
+#   }
+# }
 
 # create a bucket in gcp
 resource "google_storage_bucket" "gitops_bucket" {
