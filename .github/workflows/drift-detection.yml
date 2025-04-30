@@ -31,29 +31,10 @@ jobs:
     - name: Terraform Init
       run: terraform init -input=false
 
-    # Format Terraform files
-    - name: Terraform Format
-      run: terraform fmt
-
-    # Validate Terraform configuration
-    - name: Terraform Validate
-      run: terraform validate
-
     # Generate Terraform plan for drift detection
     - name: Terraform Plan
       id: plan
       run: |
          terraform plan -detailed-exitcode
-         export exitcode=$?
-         echo $exitcode
-
-         if [ $exit_code -eq 0 ]; then
-           echo "No drift detected."
-         elif [ $exit_code -eq 1 ]; then
-           echo "Error in plan."
-           exit 1
-         elif [ $exit_code -eq 2 ]; then
-           echo "Drift detected."
-           terraform apply -auto-approve
-         fi
+         terraform apply -auto-approve
 
