@@ -43,9 +43,9 @@ jobs:
     - name: Terraform Plan
       id: plan
       run: |
-         terraform plan -no-color -detailed-exitcode
-         export exit_code=$?
-         echo $exit_code
+         terraform plan -detailed-exitcode
+         export exitcode=$?
+         echo $exitcode
 
          if [ $exit_code -eq 0 ]; then
            echo "No drift detected."
@@ -56,18 +56,4 @@ jobs:
            echo "Drift detected."
            terraform apply -auto-approve
          fi
-
-    # # Check for drift
-    # - name: Check for Drift
-    #   run: |
-    #     if [ ${{ steps.plan.outputs.exit_code }} -eq 2 ]; then
-    #       echo "Drift detected!"
-    #     else
-    #       echo "No drift detected."
-    #     fi
-
-    # # Apply Terraform changes if drift is detected
-    # - name: Apply if drift detected
-    #   if: steps.plan.outputs.exit_code == 2
-    #   run: terraform apply -auto-approve
 
