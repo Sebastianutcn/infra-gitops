@@ -1,4 +1,4 @@
-name: Terraform GitOps (GCP VM)
+name: Terraform GitOps
 
 on:
   push:
