@@ -29,3 +29,4 @@ resource "google_storage_bucket" "gitops_bucket" {
 
 
 
+
